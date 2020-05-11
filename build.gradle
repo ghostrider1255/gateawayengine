@@ -23,14 +23,15 @@ apply plugin: 'maven-publish'
 apply plugin: org.jfrog.gradle.plugin.artifactory.ArtifactoryPlugin
 
 group 'com.javasree'
-version '1.0-SNAPSHOT'
+version project.properties.containsKey("releaseVersion") ? "${artifactMajorVersion}" : "${artifactMajorVersion}-${artifactBuildNumber}"
 sourceCompatibility = 1.8
 
 ext {
     springCloudVersion ='Hoxton.SR4'
     artifactName ='<artifact>'
     artifactory = 'http://localhost:8081/artifactory/'
-    artifactoryRepo = 'gradle-lib-snashot'
+    artifactoryRepo = 'gradle-lib-release'
+    artifactorySnapShotRepo = 'gradle-lib-snashot'
     artifactoryRepo3pp = 'pub-gradle-remote'
     artifactoryUser = System.getProperty("user", "")
     artifactoryPassword = System.getProperty("password", "")
@@ -48,49 +49,27 @@ repositories {
     }
 }
 
-artifactory {
-    contextUrl = "${artifactory}"   //The base Artifactory URL if not overridden by the publisher/resolver
-    publish {
-        repository {
-            repoKey = "${artifactoryRepo}"
-            allowInsecureProtocol = true
-            username = "${artifactory_user}"
-            password = "${artifactory_password}"
-            maven = true
-        }
-        defaults {
-            publications ('mavenJava')
-            publishArtifacts = true
-            allowInsecureProtocol = true
-            publishPom = true
-        }
-    }
-    resolve {
-        repository {
-            repoKey = "${artifactoryRepo3pp}"
-            allowInsecureProtocol = true
-            username = "${artifactory_user}"
-            password = "${artifactory_password}"
-            maven = true
-        }
+publishing.publications {
+    mavenJava(MavenPublication) {
+        artifact bootJar
+//      groupId 'gatewayengine'
+//      artifactId artifactName
+//      version '1.0-SNAPSHOT'
+        from components.java
     }
 }
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifact bootJar
-
-//            groupId 'gatewayengine'
-//            artifactId artifactName
-//            version '1.0-SNAPSHOT'
-
-            from components.java
+publishing.repositories {
+    maven {
+        allowInsecureProtocol = true
+        credentials {
+            username "anonymous"
         }
-    }
-    repositories {
-        maven { url "${artifactory}${artifactoryRepo}"
-            allowInsecureProtocol = true}
+        if(project.version.endsWith('-SNAPSHOT')) {
+            url "${artifactory}${artifactorySnapShotRepo}"
+        } else {
+            url "${artifactory}${artifactoryRepo}"
+        }
     }
 }
 
@@ -112,4 +91,17 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web',
             'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client',
             'org.springframework.cloud:spring-cloud-starter-netflix-zuul'
+}
+
+
+
+
+task versionIncr {
+    Properties props = new Properties()
+    File propsFile = new File('gradle.properties')
+    props.load(propsFile.newDataInputStream())
+    Integer nextbuildnum = ( ((props.getProperty('artifactBuildNumber')) as BigDecimal) + 1 )
+    props.setProperty('artifactBuildNumber', nextbuildnum.toString())
+    props.store(propsFile.newWriter(), null)
+    props.load(propsFile.newDataInputStream())
 }
