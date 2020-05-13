@@ -18,14 +18,14 @@ plugins {
 
 apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
-apply plugin: io.spring.gradle.dependencymanagement.DependencyManagementPlugin
+//apply plugin: 'io.spring.gradle.dependencymanagement.DependencyManagementPlugin'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'com.jfrog.artifactory'
 apply plugin: 'maven-publish'
 apply plugin: org.jfrog.gradle.plugin.artifactory.ArtifactoryPlugin
 
 group 'com.javasree'
-version project.properties.containsKey("releaseVersion") ? "${artifactMajorVersion}" : "${artifactMajorVersion}-${artifactBuildNumber}"
+version project.properties.containsKey("releaseVersion") ? "${artifactMajorVersion}" : "${artifactMajorVersion}-${artifactBuildNumber}-SNAPSHOT"
 sourceCompatibility = 1.8
 
 ext {
@@ -45,8 +45,8 @@ repositories {
         url "${artifactory}${artifactoryRepo3pp}"
         allowInsecureProtocol = true
         credentials {               // Optional resolver credentials (leave out to use anonymous resolution)
-            username = "admin" // Artifactory user name
-            password = "password" // Password or API Key
+            username = artifactory_user // Artifactory user name
+            password = artifactory_password // Password or API Key
         }
     }
 }
@@ -65,8 +65,8 @@ publishing.repositories {
     maven {
         allowInsecureProtocol = true
         credentials {
-            username = "admin" // Artifactory user name
-            password = "password" // Password or API Key
+            username = artifactory_user // Artifactory user name
+            password = artifactory_password // Password or API Key
         }
         if(project.version.endsWith('-SNAPSHOT')) {
             url "${artifactory}${artifactorySnapShotRepo}"
@@ -79,7 +79,6 @@ publishing.repositories {
 dependencyManagement {
     imports {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-        //mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
     }
 }
 
@@ -96,9 +95,6 @@ dependencies {
             'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:2.2.2.RELEASE',
             'org.springframework.cloud:spring-cloud-starter-netflix-zuul:2.2.2.RELEASE'
 }
-
-
-
 
 task versionIncr {
     Properties props = new Properties()
