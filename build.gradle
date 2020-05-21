@@ -28,7 +28,7 @@ version project.properties.containsKey("releaseVersion") ? "${artifactMajorVersi
 sourceCompatibility = 1.8
 
 ext {
-    springCloudVersion ='Greenwich.RELEASE'
+    springCloudVersion ='Hoxton.SR1'
     artifactName ='<artifact>'
     artifactory = 'http://localhost:8081/artifactory/'
     artifactoryRepo = 'gradle-lib-release'
@@ -92,8 +92,8 @@ docker {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web',
-            'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:2.2.2.RELEASE',
-            'org.springframework.cloud:spring-cloud-starter-netflix-zuul:2.2.2.RELEASE'
+            'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client',
+            'org.springframework.cloud:spring-cloud-starter-netflix-zuul'
 }
 
 task versionIncr {
