@@ -6,8 +6,8 @@ ARG HOST_APP_JAR_LOC
 ARG APP_HOME_DIR=/opt/app
 
 ARG APP_CONFIG_DIR=/opt/config
-RUN apk update \
-    apk add curl \
+RUN apt-get update \
+    apt-get install curl \
     mkdir -p $APP_HOME_DIR \
     mkdir -p $APP_CONFIG_DIR \
     #ls -lrt /opt/app \
