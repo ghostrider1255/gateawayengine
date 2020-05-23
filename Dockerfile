@@ -6,7 +6,9 @@ ARG HOST_APP_JAR_LOC
 ARG APP_HOME_DIR=/opt/app
 
 ARG APP_CONFIG_DIR=/opt/config
-RUN mkdir -p $APP_HOME_DIR \
+RUN apk update \
+    apk add curl \
+    mkdir -p $APP_HOME_DIR \
     mkdir -p $APP_CONFIG_DIR \
     #ls -lrt /opt/app \
     echo $HOST_APP_JAR_LOC
