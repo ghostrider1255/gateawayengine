@@ -13,7 +13,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class AutherizationFilter extends BasicAuthenticationFilter {
@@ -29,7 +28,7 @@ public class AutherizationFilter extends BasicAuthenticationFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException{
         String authorizationHeader = request.getHeader(environment.getProperty("authorization.token.header.name"));
 
-        if(authorizationHeader == null || authorizationHeader.startsWith(environment.getProperty("authorization.token.header.prefix"))){
+        if(authorizationHeader == null || !authorizationHeader.startsWith(environment.getProperty("authorization.token.header.prefix"))){
             chain.doFilter(request,response);
             return;
         }
