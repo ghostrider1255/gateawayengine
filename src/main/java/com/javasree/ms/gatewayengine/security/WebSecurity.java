@@ -13,7 +13,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 @EnableWebSecurity
 public class WebSecurity extends WebSecurityConfigurerAdapter {
 
-
     private final Environment environment;
 
     @Autowired
