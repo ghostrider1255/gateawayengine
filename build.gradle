@@ -98,6 +98,12 @@ dependencies {
             'org.springframework.cloud:spring-cloud-starter-netflix-zuul'
 }
 
+configurations {
+    all {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    }
+}
+
 task versionIncr {
     Properties props = new Properties()
     File propsFile = new File('gradle.properties')
