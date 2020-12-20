@@ -84,7 +84,7 @@ dependencyManagement {
 
 docker {
     name "localhost:5000/${project.name}:${project.version}"
-    files tasks.bootJar.outputs
+    files tasks.bootJar.outputs,"$buildDir/resources/main/docker/filebeat.yml","$buildDir/resources/main/docker/log4j2.xml"
     //tag 'localhost:5000/${project.name}:${project.version}'
     dockerfile file('Dockerfile')
     //buildArgs([HOST_APP_JAR_LOC: 'version'])
