@@ -84,7 +84,7 @@ dependencyManagement {
 
 docker {
     name "localhost:5000/${project.name}:${project.version}"
-    files tasks.bootJar.outputs,"$buildDir/resources/main/docker/filebeat.yml","$buildDir/resources/main/docker/log4j2.xml"
+    files tasks.bootJar.outputs,"$buildDir/resources/main/docker/filebeat.yml","$buildDir/resources/main/docker/log4j2.xml","$buildDir/resources/main/docker/application.sh"
     //tag 'localhost:5000/${project.name}:${project.version}'
     dockerfile file('Dockerfile')
     //buildArgs([HOST_APP_JAR_LOC: 'version'])
@@ -95,7 +95,8 @@ dependencies {
             'org.springframework.boot:spring-boot-starter-security',
             'io.jsonwebtoken:jjwt:0.9.1',
             'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client',
-            'org.springframework.cloud:spring-cloud-starter-netflix-zuul'
+            'org.springframework.cloud:spring-cloud-starter-netflix-zuul',
+            'org.springframework.boot:spring-boot-starter-log4j2'
 }
 
 configurations {
@@ -106,7 +107,7 @@ configurations {
 
 task versionIncr {
     Properties props = new Properties()
-    File propsFile = new File('gradle.properties')
+    File propsFile = new File("${project.projectDir}\\gradle.properties")
     props.load(propsFile.newDataInputStream())
     Integer nextbuildnum = ( ((props.getProperty('artifactBuildNumber')) as BigDecimal) + 1 )
     props.setProperty('artifactBuildNumber', nextbuildnum.toString())

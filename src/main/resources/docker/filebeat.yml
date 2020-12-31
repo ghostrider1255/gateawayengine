@@ -347,13 +347,14 @@ filebeat.inputs:
 # The tags of the shipper are included in their own field with each
 # transaction published. Tags make it easy to group servers by different
 # logical properties.
-#tags: ["service-X", "web-tier"]
+tags: ["gateway"]
 
 # Optional fields that you can specify to add additional information to the
 # output. Fields can be scalar values, arrays, dictionaries, or any nested
 # combination of these.
-#fields:
-#  env: staging
+fields:
+  env: dev
+  app_module: gateway
 
 # If this option is set to true, the custom fields are stored as top-level
 # fields in the output document instead of being grouped under a fields
