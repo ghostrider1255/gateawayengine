@@ -107,7 +107,7 @@ configurations {
 
 task versionIncr {
     Properties props = new Properties()
-    File propsFile = new File("${project.projectDir}\\gradle.properties")
+    File propsFile = new File("${project.projectDir}${File.separator}gradle.properties")
     props.load(propsFile.newDataInputStream())
     Integer nextbuildnum = ( ((props.getProperty('artifactBuildNumber')) as BigDecimal) + 1 )
     props.setProperty('artifactBuildNumber', nextbuildnum.toString())
